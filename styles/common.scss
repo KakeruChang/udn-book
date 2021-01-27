@@ -46,7 +46,7 @@
     &:nth-child(2n + 1) {
       right: 0;
     }
-    $dataLength: var(--dataLength);
+
     @for $i from 0 through 25 {
       &:nth-child(#{$i}) {
         transform: translate3D(
@@ -74,4 +74,12 @@
 }
 .year {
   font-size: 80px;
+}
+
+// fade
+.fade-in {
+  width: 100% !important;
+}
+.fade-out {
+  width: 0 !important;
 }

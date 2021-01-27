@@ -13,32 +13,18 @@ const Wrapper = styled.div`
   top: 0;
   left: 0;
 `
-const FadeInAnimation = (index) => {
-  const getWidth = (progress) => {
-    if (progress >= (index + 1) * 12.5 && progress <= (index + 4) * 12.5) {
-      return '100%'
-    }
-    return '0'
-  }
-
-  return keyframes`
+const FadeAnimation = (index) => keyframes`
   0% { width: 0; }
-  12.5%{width: ${getWidth(12.5)};}
-  25%{width: ${getWidth(25)};}
-  37.5%{width: ${getWidth(37.5)};}
-  50% { width: ${getWidth(50)}; }
-  62.5%{width: ${getWidth(62.5)};}
-  75%{width:${getWidth(75)};}
-  87.5%{width: ${getWidth(87.5)};}
+  ${20 + (index * 20) / 3}% { width: 100%; }
+  ${80 - (index * 20) / 3}% { width: 100% }
   100% { width: 0; }
 `
-}
 
 const FadeIn = styled.div`
   background-color: black;
   height: 25vh;
   animation-duration: ${(props) => `${props.seconds}s`};
-  animation-name: ${(props) => FadeInAnimation(props.timeIndex)};
+  animation-name: ${(props) => FadeAnimation(props.timeIndex)};
   width: 0;
   position: absolute;
   top: ${(props) => `${props.timeIndex * 25}vh`};
@@ -48,32 +34,22 @@ const Loading: FC = () => {
   const dispatch = useDispatch()
   const isLoading = useSelector((state: RootStateType) => state.isLoading)
   const [isExist, setIsExist] = useState(false)
-  const animationSeconds = 2
+  const animationSeconds = 2.5
 
   useEffect(() => {
     if (isLoading) {
+      document.body.setAttribute('style', 'overflow: hidden;')
       setIsExist(true)
 
-      // setTimeout(() => {
-      //   setIsExist(false)
-      //   dispatch(endLoading())
-      // }, animationSeconds * 1000)
-    } else {
-      console.log('endloading')
+      dispatch(endLoading())
+      setTimeout(() => {
+        document.body.setAttribute('style', 'overflow: visible;')
+        setIsExist(false)
+      }, animationSeconds * 1000)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
-
-  //   useEffect(() => {
-  //     if (isLoading) {
-  //       setLoadingState(true)
-  //     } else {
-  //       setTimeout(() => {
-  //         setLoadingState(false)
-  //       }, 5000)
-  //     }
-  //   }, [isLoading])
 
   const FadeInList = () => {
     const number = 4

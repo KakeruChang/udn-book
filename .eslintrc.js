@@ -46,7 +46,8 @@ module.exports = {
         mjs: 'never'
       }
     ],
-    'operator-linebreak': 'off'
+    'operator-linebreak': 'off',
+    'object-curly-newline': 'off'
   },
   settings: {
     react: {

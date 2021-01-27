@@ -1,6 +1,6 @@
-import { FC } from 'react'
+import { NextPage } from 'next'
 import TimeLine from 'components/Timeline'
 
-const time: FC = () => <TimeLine />
+const time: NextPage = () => <TimeLine />
 
 export default time

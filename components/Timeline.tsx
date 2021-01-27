@@ -1,13 +1,7 @@
 import { useState, useEffect, FC } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 import Image from 'next/image'
 
-import { RootStateType } from 'redux/reducers/rootReducer'
-import { startLoading, endLoading } from 'redux/actions/loadingAction'
-
 const Timeline: FC = () => {
-  const dispatch = useDispatch()
-  const isLoading = useSelector((state: RootStateType) => state.isLoading)
   const [movieList, setMovieList] = useState([])
   const [count, setCount] = useState(0)
 
@@ -50,9 +44,6 @@ const Timeline: FC = () => {
   useEffect(() => {
     if (count === movieList.length && movieList.length !== 0) {
       setSceneHeight()
-      if (isLoading) {
-        dispatch(endLoading())
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count])
@@ -64,9 +55,6 @@ const Timeline: FC = () => {
 
       setMovieList(data)
     }
-    // test
-    // dispatch(startLoading())
-    //
 
     getData()
 

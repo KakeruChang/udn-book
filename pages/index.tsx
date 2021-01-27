@@ -1,44 +1,33 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useSelector, useDispatch } from 'react-redux'
-
-import { RootStateType } from 'redux/reducers/rootReducer'
-import { startLoading } from 'redux/actions/loadingAction'
 import styles from 'styles/Home.module.css'
 
-const Home: NextPage = () => {
-  const dispatch = useDispatch()
-  const isLoading = useSelector((state: RootStateType) => state.isLoading)
+const Home: NextPage = () => (
+  <div className={styles.container}>
+    <Head>
+      <title>Create Next App</title>
+      <link rel='icon' href='/favicon.ico' />
+    </Head>
+    <main className={styles.main}>
+      <h1 className={styles.title}>
+        Welcome to <a href='https://nextjs.org'>UDN</a>
+      </h1>
 
-  const test = () => {
-    dispatch(startLoading())
-  }
-
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href='https://nextjs.org'>UDN</a>
-          {`${isLoading}`}
-        </h1>
-
-        <div className={styles.grid}>
-          <Link href='/time'>
-            <a href='/time' className={styles.card} onClick={() => test()}>
-              <h3>Time &rarr;</h3>
-              <p>Find in-depth information about Next.js features and API.</p>
-            </a>
-          </Link>
-          <a href='https://nextjs.org/learn' className={styles.card}>
+      <div className={styles.grid}>
+        <Link href='/time'>
+          <a href='/time' className={styles.card}>
+            <h3>Time &rarr;</h3>
+            <p>Find in-depth information about Next.js features and API.</p>
+          </a>
+        </Link>
+        <Link href='/list/0'>
+          <a href='/list/0' className={styles.card}>
             <h3>List &rarr;</h3>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
-          {/* <a
+        </Link>
+        {/* <a
             href='https://github.com/vercel/next.js/tree/master/examples'
             className={styles.card}
           >
@@ -55,21 +44,20 @@ const Home: NextPage = () => {
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
           </a> */}
-        </div>
-      </main>
+      </div>
+    </main>
 
-      <footer className={styles.footer}>
-        <a
-          href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Powered by{' '}
-          <img src='/vercel.svg' alt='Vercel Logo' className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
-}
+    <footer className={styles.footer}>
+      <a
+        href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
+        target='_blank'
+        rel='noopener noreferrer'
+      >
+        Powered by{' '}
+        <img src='/vercel.svg' alt='Vercel Logo' className={styles.logo} />
+      </a>
+    </footer>
+  </div>
+)
 
 export default Home
