@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react'
 // import store from '../redux/store'
 import { wrapper } from 'redux/store'
 import Loading from 'components/Loading'
-import SideControllList from 'components/SideControllList'
+import TextSizeController from 'components/TextSizeController'
 import useRouteChange from 'hook/useRouteChange'
 import '../styles/globals.css'
 import '../styles/common.scss'
@@ -19,8 +19,8 @@ const MyApp = ({ Component, pageProps }: MyAppProps) => {
   return (
     <>
       <Component {...pageProps} />
-      <SideControllList />
       <Loading />
+      <TextSizeController />
     </>
   )
 }

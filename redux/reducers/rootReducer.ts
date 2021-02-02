@@ -1,16 +1,22 @@
 import { HYDRATE } from 'next-redux-wrapper'
 import { combineReducers, Action } from 'redux'
-// import testReducer, { TestStateType } from './testReducer'
-// import { TestContent } from '../actions/testAction'
+
 import loadingReducer from './loadingReducer'
+import textReducer from './textReducer'
+import languageReducer from './languageReducer'
+import languageDataReducer from './languageDataReducer'
+import { LanguageDataContent } from '../actions/languageDataAction'
 
 export interface RootStateType {
-  // tests: TestStateType
   isLoading: boolean
+  textSize: string
+  language: string
+  data: LanguageDataContent
 }
+
 interface RootAction extends Action {
   type: string
-  payload?: boolean
+  payload?: RootStateType
 }
 
 const rootReducer = (
@@ -18,15 +24,21 @@ const rootReducer = (
   action: RootAction
 ): RootStateType => {
   if (action.type === HYDRATE) {
-    return {
+    const result = {
       ...state,
-      isLoading: action.payload
+      data: {
+        zh: action.payload.data.zh,
+        en: action.payload.data.en
+      }
     }
+    return result
   }
 
   return combineReducers({
-    // tests: testReducer,
-    isLoading: loadingReducer
+    textSize: textReducer,
+    isLoading: loadingReducer,
+    language: languageReducer,
+    data: languageDataReducer
   })(state, action)
 }
 

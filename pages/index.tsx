@@ -1,7 +1,23 @@
-import { NextPage } from 'next'
+import { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { END } from 'redux-saga'
+
+import { wrapper } from 'redux/store'
+import { getLanguageBegin } from 'redux/actions/languageDataAction'
+
 import styles from 'styles/Home.module.css'
+
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
+  async ({ store }) => {
+    if (Object.keys(store.getState().data.zh).length === 0) {
+      store.dispatch(getLanguageBegin())
+      store.dispatch(END)
+    }
+
+    await store.sagaTask.toPromise()
+  }
+)
 
 const Home: NextPage = () => (
   <div className={styles.container}>

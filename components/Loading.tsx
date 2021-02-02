@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
 `
 const FadeAnimation = (index) => keyframes`
   0% { width: 0; }
@@ -41,10 +42,10 @@ const Loading: FC = () => {
       document.body.setAttribute('style', 'overflow: hidden;')
       setIsExist(true)
 
-      dispatch(endLoading())
       setTimeout(() => {
         document.body.setAttribute('style', 'overflow: visible;')
         setIsExist(false)
+        dispatch(endLoading())
       }, animationSeconds * 1000)
     }
 

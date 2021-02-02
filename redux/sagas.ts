@@ -1,19 +1,29 @@
 import { all, AllEffect, ForkEffect, put, takeEvery } from 'redux-saga/effects'
-import axios from 'axios'
+// import axios from 'axios'
 
-import { failure, getTestsSuccess, GET_TESTS_BEGIN } from './actions/testAction'
+import {
+  failure,
+  getLanguageDataSuccess,
+  GET_LANGUAGEDATA_BEGIN
+} from './actions/languageDataAction'
 
-function* getSelfTests() {
+function* getLanguageData() {
   try {
-    const res = yield axios.get('http://localhost:3000/apitest/test')
-    yield put(getTestsSuccess(res.data))
+    const TestPromise = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ zh: { test: true }, en: { test2: false } })
+      }, 250)
+    })
+    // const res = yield axios.get('http://localhost:3000/apitest/test')
+    const res = yield TestPromise
+    yield put(getLanguageDataSuccess(res))
   } catch (err) {
     yield put(failure(err))
   }
 }
 
 function* testSaga(): Iterator<ForkEffect<never>> {
-  yield takeEvery(GET_TESTS_BEGIN, getSelfTests)
+  yield takeEvery(GET_LANGUAGEDATA_BEGIN, getLanguageData)
 }
 
 function* rootSaga(): Iterator<
@@ -24,22 +34,3 @@ function* rootSaga(): Iterator<
 }
 
 export default rootSaga
-// ===================================
-// function* getTestsSaga() {
-//   try {
-//     const res = yield fetch('http://localhost:3000/apitest/test')
-//     const data = yield res.json()
-//     yield put(getTestsSuccess(data))
-//   } catch (err) {
-//     yield put(failure(err))
-//   }
-// }
-
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// function* rootSaga(): Generator<AllEffect<ForkEffect<never>>, any, undefined> {
-//   yield all([
-//     // takeLatest(actionTypes.LOAD_DATA, loadDataSaga),
-//     takeLatest(GET_TESTS_BEGIN, getTestsSaga)
-//   ])
-// }
-// ===================================

@@ -1,6 +1,16 @@
-import { NextPage } from 'next'
+import { useState, FC } from 'react'
 import TimeLine from 'components/Timeline'
+import TimelineIndicator from 'components/TimelineIndicator'
 
-const time: NextPage = () => <TimeLine />
+const Time: FC = () => {
+  const [timelineHeight, setTimelineHeight] = useState(0)
 
-export default time
+  return (
+    <>
+      <TimeLine setTimelineHeight={setTimelineHeight} />
+      <TimelineIndicator timelineHeight={timelineHeight} />
+    </>
+  )
+}
+
+export default Time
