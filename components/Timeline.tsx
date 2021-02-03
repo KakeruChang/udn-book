@@ -108,7 +108,6 @@ const Timeline: FC<TimelineProps> = ({
     if (!sceneHeightTrigger) {
       if (count === movieList.length && movieList.length !== 0) {
         setSceneHeight()
-        console.log('setSceneHeight()')
       }
     }
 
@@ -116,7 +115,6 @@ const Timeline: FC<TimelineProps> = ({
   }, [count])
 
   useEffect(() => {
-    console.log('getdata()')
     const getData = async () => {
       const req = await fetch('https://ghibliapi.herokuapp.com/films')
       const data = await req.json()

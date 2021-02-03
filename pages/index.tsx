@@ -1,6 +1,6 @@
 import {
   NextPage
-  // GetServerSideProps
+  // GetStaticProps
 } from 'next'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,11 +11,10 @@ import Link from 'next/link'
 import { getLanguageBegin } from 'redux/actions/languageDataAction'
 import { RootStateType } from 'redux/reducers/rootReducer'
 // import { wrapper } from 'redux/store'
-// import { getLanguageBegin } from 'redux/actions/languageDataAction'
 
 import styles from 'styles/Home.module.css'
 
-// export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
+// export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 //   async ({ store }) => {
 //     if (Object.keys(store.getState().data.zh).length === 0) {
 //       store.dispatch(getLanguageBegin())
