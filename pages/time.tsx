@@ -3,12 +3,15 @@ import TimeLine from 'components/Timeline'
 import TimelineIndicator from 'components/TimelineIndicator'
 
 const Time: FC = () => {
-  const [timelineHeight, setTimelineHeight] = useState(0)
+  const [viewportHeight, setViewportHeight] = useState(0)
 
   return (
     <>
-      <TimeLine setTimelineHeight={setTimelineHeight} />
-      <TimelineIndicator timelineHeight={timelineHeight} />
+      <TimeLine
+        viewportHeight={viewportHeight}
+        setViewportHeight={setViewportHeight}
+      />
+      <TimelineIndicator timelineHeight={viewportHeight} />
     </>
   )
 }

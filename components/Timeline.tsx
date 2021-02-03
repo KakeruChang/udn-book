@@ -60,14 +60,18 @@ const Container = styled.div`
 `
 
 interface TimelineProps {
-  setTimelineHeight: Dispatch<SetStateAction<number>>
+  setViewportHeight: Dispatch<SetStateAction<number>>
+  viewportHeight: number
 }
 
-const Timeline: FC<TimelineProps> = ({ setTimelineHeight }: TimelineProps) => {
+const Timeline: FC<TimelineProps> = ({
+  setViewportHeight,
+  viewportHeight
+}: TimelineProps) => {
   const [movieList, setMovieList] = useState([])
   const [positionList, setPositionList] = useState([])
   const [count, setCount] = useState(0)
-  const [viewportHeight, setViewportHeight] = useState(0)
+  const [sceneHeightTrigger, setSceneHeightTrigger] = useState(false)
   const [cameraZ, setCameraZ] = useState(0)
   const root = {
     scenePerspective: 1,
@@ -89,7 +93,7 @@ const Timeline: FC<TimelineProps> = ({ setTimelineHeight }: TimelineProps) => {
 
     // Update --viewportHeight value
     setViewportHeight(height)
-    setTimelineHeight(height)
+    setSceneHeightTrigger(true)
   }
 
   const moveCamera = () => {
@@ -97,17 +101,22 @@ const Timeline: FC<TimelineProps> = ({ setTimelineHeight }: TimelineProps) => {
   }
 
   const completeLoading = () => {
-    setCount(count + 1)
+    setCount((preCount) => preCount + 1)
   }
 
   useEffect(() => {
-    if (count === movieList.length && movieList.length !== 0) {
-      setSceneHeight()
+    if (!sceneHeightTrigger) {
+      if (count === movieList.length && movieList.length !== 0) {
+        setSceneHeight()
+        console.log('setSceneHeight()')
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count])
 
   useEffect(() => {
+    console.log('getdata()')
     const getData = async () => {
       const req = await fetch('https://ghibliapi.herokuapp.com/films')
       const data = await req.json()
@@ -124,11 +133,13 @@ const Timeline: FC<TimelineProps> = ({ setTimelineHeight }: TimelineProps) => {
       setPositionList(memo)
       setMovieList(data)
     }
-
     getData()
 
     moveCamera()
     window.addEventListener('scroll', moveCamera)
+    return () => {
+      window.removeEventListener('scroll', moveCamera)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

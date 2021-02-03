@@ -24,14 +24,10 @@ const rootReducer = (
   action: RootAction
 ): RootStateType => {
   if (action.type === HYDRATE) {
-    const result = {
+    return {
       ...state,
-      data: {
-        zh: action.payload.data.zh,
-        en: action.payload.data.en
-      }
+      ...action.payload
     }
-    return result
   }
 
   return combineReducers({
