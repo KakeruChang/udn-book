@@ -10,7 +10,9 @@ const useRouteChange = (): void => {
 
   useEffect(() => {
     const handleRouteChangeComplete = () => {
-      dispatch(startLoading())
+      if (router.pathname !== '/') {
+        dispatch(startLoading())
+      }
     }
 
     router.events.on('routeChangeComplete', handleRouteChangeComplete)
@@ -18,8 +20,7 @@ const useRouteChange = (): void => {
     return () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch, router])
 }
 
 export default useRouteChange

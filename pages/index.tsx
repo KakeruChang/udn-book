@@ -1,33 +1,36 @@
-import {
-  NextPage
-  // GetStaticProps
-} from 'next'
+import { NextPage, GetStaticProps } from 'next'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Head from 'next/head'
 import Link from 'next/link'
-// import { END } from 'redux-saga'
+import { END } from 'redux-saga'
 
 import { getLanguageBegin } from 'redux/actions/languageDataAction'
 import { RootStateType } from 'redux/reducers/rootReducer'
-// import { wrapper } from 'redux/store'
-
+import { wrapper } from 'redux/store'
 import styles from 'styles/Home.module.css'
 
-// export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
-//   async ({ store }) => {
-//     if (Object.keys(store.getState().data.zh).length === 0) {
-//       store.dispatch(getLanguageBegin())
-//       store.dispatch(END)
-//     }
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  async ({ store }) => {
+    if (Object.keys(store.getState().data.zh).length === 0) {
+      store.dispatch(getLanguageBegin())
+      store.dispatch(END)
+    }
 
-//     await store.sagaTask.toPromise()
-//   }
-// )
+    await store.sagaTask.toPromise()
+  }
+)
 
 const Home: NextPage = () => {
   const dispatch = useDispatch()
   const data = useSelector((state: RootStateType) => state.data)
+  const links = [
+    { title: 'Overview', link: '/overview' },
+    { title: 'Organization', link: '/organization' },
+    { title: 'Newmedia', link: '/newmedia' },
+    { title: 'Reporter', link: '/reporter' },
+    { title: 'Vision', link: '/vision' }
+  ]
 
   useEffect(() => {
     if (Object.keys(data.zh).length === 0) {
@@ -48,18 +51,13 @@ const Home: NextPage = () => {
         </h1>
 
         <div className={styles.grid}>
-          <Link href='/time'>
-            <a href='/time' className={styles.card}>
-              <h3>Time &rarr;</h3>
-              <p>Find in-depth information about Next.js features and API.</p>
-            </a>
-          </Link>
-          <Link href='/list/0'>
-            <a href='/list/0' className={styles.card}>
-              <h3>List &rarr;</h3>
-              <p>Learn about Next.js in an interactive course with quizzes!</p>
-            </a>
-          </Link>
+          {links.map((item) => (
+            <Link href={item.link} key={item.link}>
+              <a href='/list/time' className={styles.card}>
+                <h3>{item.title} &rarr;</h3>
+              </a>
+            </Link>
+          ))}
           {/* <a
             href='https://github.com/vercel/next.js/tree/master/examples'
             className={styles.card}

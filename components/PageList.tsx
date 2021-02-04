@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, FC } from 'react'
 import { useSelector } from 'react-redux'
-import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import styled from 'styled-components'
@@ -29,8 +28,12 @@ const BottomLine = styled.div`
   width: 100%;
   border: 1px solid black;
 `
+interface PageListProps {
+  title: string
+  rootUrl: string
+}
 
-const Item: NextPage = () => {
+const PageList: FC<PageListProps> = ({ title, rootUrl }: PageListProps) => {
   const router = useRouter()
   const { id } = router.query
   const textSize = useSelector((state: RootStateType) => state.textSize)
@@ -53,34 +56,40 @@ const Item: NextPage = () => {
 
     const observer = new IntersectionObserver(callback, options)
     observer.observe(bottomRef.current)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (trigger) {
       if (id && typeof id === 'string') {
+        // prevent going to next page again
         window.scrollTo(0, 0)
-        router.push(`/list/${parseInt(id, 10) + 1}`)
+        console.log('pagelist: window.scrollTo(0, 0)')
+
+        router.push(`${rootUrl}/${parseInt(id, 10) + 1}`)
+        // if (router.asPath.indexOf('#') !== -1) {
+        //   router.push(router.asPath)
+        // } else {
+        //   router.push(`${rootUrl}/${parseInt(id, 10) + 1}`)
+        // }
 
         setTrigger(false)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger])
+  }, [trigger, router])
 
   return (
     <>
       <Head>
-        <title>Page{id}</title>
+        <title>{`${title}${id}`}</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Bg>
         <Space id={`list-${id}-part1`} textSize={textSize}>
-          Page{id}-Part1
+          {`${title}-${id}-Part1`}
         </Space>
         <Space id={`list-${id}-part2`} textSize={textSize}>
-          Page{id}-Part2
+          {`${title}-${id}-Part2`}
         </Space>
         <BottomLine ref={bottomRef} />
       </Bg>
@@ -88,4 +97,4 @@ const Item: NextPage = () => {
   )
 }
 
-export default Item
+export default PageList

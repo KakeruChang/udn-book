@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled, { keyframes } from 'styled-components'
+import { useRouter } from 'next/router'
 
 import { RootStateType } from 'redux/reducers/rootReducer'
 import { endLoading } from 'redux/actions/loadingAction'
@@ -32,6 +33,7 @@ const FadeIn = styled.div`
 `
 
 const Loading: FC = () => {
+  const router = useRouter()
   const dispatch = useDispatch()
   const isLoading = useSelector((state: RootStateType) => state.isLoading)
   const [isExist, setIsExist] = useState(false)
@@ -41,6 +43,13 @@ const Loading: FC = () => {
     if (isLoading) {
       document.body.setAttribute('style', 'overflow: hidden;')
       setIsExist(true)
+
+      setTimeout(() => {
+        if (router.asPath.indexOf('#') === -1) {
+          window.scrollTo(0, 0)
+          console.log('loading:window.scrollTo(0, 0)')
+        }
+      }, (animationSeconds * 1000) / 2)
 
       setTimeout(() => {
         document.body.setAttribute('style', 'overflow: visible;')
