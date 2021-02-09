@@ -36,9 +36,9 @@ const Home: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const clickHandler = (e, link) => {
+  const clickHandler = (e, link, title) => {
     e.preventDefault()
-    dispatch(startLoading())
+    dispatch(startLoading(title))
     router.push(link, undefined, { shallow: true })
   }
 
@@ -57,9 +57,9 @@ const Home: NextPage = () => {
           {links.map((item) => (
             <Link href={item.link} key={item.link}>
               <a
-                href='/list/time'
+                href={item.link}
                 className={styles.card}
-                onClick={(e) => clickHandler(e, item.link)}
+                onClick={(e) => clickHandler(e, item.link, item.title)}
               >
                 <h3>{item.title} &rarr;</h3>
               </a>

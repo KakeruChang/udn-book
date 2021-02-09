@@ -12,7 +12,7 @@ const useRouteChange = (): void => {
 
   useEffect(() => {
     const handleRouteChangeComplete = () => {
-      if (!isLoading) {
+      if (!isLoading.status) {
         dispatch(startPageChanging())
       }
     }
@@ -22,7 +22,7 @@ const useRouteChange = (): void => {
     return () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete)
     }
-  }, [dispatch, router, isLoading])
+  }, [dispatch, router, isLoading.status])
 }
 
 export default useRouteChange

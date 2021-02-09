@@ -2,11 +2,15 @@ import { Action } from 'redux'
 
 export interface loadingAction extends Action {
   type: string
+  payload?: {
+    title: string
+  }
 }
 
 export const START_LOADING = 'START_LOADING'
-export const startLoading = (): loadingAction => ({
-  type: START_LOADING
+export const startLoading = (title: string): loadingAction => ({
+  type: START_LOADING,
+  payload: { title }
 })
 
 export const END_LOADING = 'END_LOADING'

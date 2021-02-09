@@ -5,13 +5,12 @@ import Head from 'next/head'
 import styled from 'styled-components'
 
 import SideControllList from 'components/SideControllList'
-import { startLoading, endLoading } from 'redux/actions/loadingAction'
+import { startLoading } from 'redux/actions/loadingAction'
 import { links } from 'data/index'
 import { RootStateType } from 'redux/reducers/rootReducer'
 
-const Wrapper = styled.div`
-  position: relative;
-`
+const Wrapper = styled.div``
+
 const Title = styled.h1`
   text-align: center;
 `
@@ -36,10 +35,20 @@ const PageContent: FC<PageContentProps> = ({
   children
 }: PageContentProps) => {
   const [trigger, setTrigger] = useState(false)
+  const [rollInTrigger, setRollInTrigger] = useState(false)
   const bottomRef = useRef(null)
   const router = useRouter()
   const dispatch = useDispatch()
   const isLoading = useSelector((state: RootStateType) => state.isLoading)
+
+  useEffect(() => {
+    if (!isLoading.status && isLoading.title.length > 0) {
+      console.log('end loading：', isLoading)
+      setRollInTrigger(true)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading.status])
 
   useEffect(() => {
     const options = {
@@ -58,9 +67,6 @@ const PageContent: FC<PageContentProps> = ({
     const observer = new IntersectionObserver(callback, options)
     observer.observe(bottomRef.current)
 
-    if (isLoading) {
-      dispatch(endLoading())
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -70,7 +76,7 @@ const PageContent: FC<PageContentProps> = ({
         if (router.pathname === links[i].link) {
           const nextPageIndex = i + 1
           if (nextPageIndex < links.length) {
-            dispatch(startLoading())
+            dispatch(startLoading(links[nextPageIndex].title))
             router.push(links[nextPageIndex].link)
           }
         }
@@ -83,18 +89,11 @@ const PageContent: FC<PageContentProps> = ({
       <Head>
         <title>{title}</title>
       </Head>
-
-      <Wrapper>
+      <Wrapper trigger={rollInTrigger}>
         <Space id='list-part1'>
           <Title>{title}</Title>
         </Space>
         <Space id='list-part2' />
-        {/* <Space id='#list-part1'>
-          <Title>{title}</Title>
-        </Space>
-        <Space id='#list-part2'>
-          <BottomLine ref={bottomRef} />
-        </Space> */}
         {children}
         <SideControllList />
         <BottomLine ref={bottomRef} />

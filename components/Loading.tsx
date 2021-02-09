@@ -14,22 +14,34 @@ const Wrapper = styled.div`
   top: 0;
   left: 0;
   z-index: 10;
+  background-color: #000;
+  color: #fff;
+  font-size: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `
-const FadeAnimation = (index, count) => keyframes`
-  ${0 + index * (100 / (2 * count))}% { transform: translateX(100%) }
-  ${50 + index * (100 / (2 * count))}% { transform: translateX(-100%) }
-  100% { transform: translateX(-100%)}
+const LoadingText = styled.div`
+  font-size: 50px;
+  font-weight: bolder;
 `
 
-const FadeIn = styled.div`
-  background-color: black;
-  height: ${(props) => `${100 / props.count}vh`};
+const LoadingAnimation = keyframes`
+  0% { width: 0; }
+  100% { width: 100%; }
+`
+
+const LoadingWrapper = styled.div`
+  margin-top: 50px;
+  width: 80%;
+`
+const LoadingBar = styled.div`
+  background-color: #fff;
+  width: 0;
+  height: 10px;
   animation-duration: ${(props) => `${props.seconds}s`};
-  animation-name: ${(props) => FadeAnimation(props.timeIndex, props.count)};
-  width: 100vw;
-  transform: translateX(100%);
-  position: absolute;
-  top: ${(props) => `${props.timeIndex * (100 / props.count)}vh`};
+  animation-name: ${LoadingAnimation};
 `
 
 const Loading: FC = () => {
@@ -40,13 +52,12 @@ const Loading: FC = () => {
   const animationSeconds = 2.5
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading.status) {
       document.body.setAttribute('style', 'overflow: hidden;')
       setIsExist(true)
 
       setTimeout(() => {
         if (router.asPath.indexOf('#') === -1) {
-          console.log('isloading: window.scrollTo({ top: 0 })')
           window.scrollTo({ top: 0 })
         }
       }, (animationSeconds * 1000) / 2)
@@ -59,27 +70,18 @@ const Loading: FC = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading])
-
-  const FadeInList = () => {
-    const count = 20
-    const list = []
-    for (let i = 0; i < count; i += 1) {
-      list.push(
-        <FadeIn
-          count={count}
-          timeIndex={i}
-          isLoading={isLoading}
-          seconds={animationSeconds}
-          key={`fade${i}`}
-        />
-      )
-    }
-    return list
-  }
+  }, [isLoading.status])
 
   if (isExist) {
-    return <Wrapper>{FadeInList()}</Wrapper>
+    return (
+      <Wrapper>
+        <h1>{isLoading.title}</h1>
+        <LoadingText>Loading...</LoadingText>
+        <LoadingWrapper>
+          <LoadingBar seconds={animationSeconds} />
+        </LoadingWrapper>
+      </Wrapper>
+    )
   }
   return null
 }
