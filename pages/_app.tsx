@@ -2,9 +2,9 @@ import { FC, ReactNode } from 'react'
 
 // import store from '../redux/store'
 import { wrapper } from 'redux/store'
-import Loading from 'components/Loading'
-import TextSizeController from 'components/TextSizeController'
+import PageChanging from 'components/PageChanging'
 import SideControllList from 'components/SideControllList'
+import BackToHome from 'components/BackToHome'
 import useRouteChange from 'hook/useRouteChange'
 import '../styles/globals.css'
 import '../styles/common.scss'
@@ -20,8 +20,8 @@ const MyApp = ({ Component, pageProps }: MyAppProps) => {
   return (
     <>
       <Component {...pageProps} />
-      <Loading />
-      <TextSizeController />
+      <PageChanging />
+      <BackToHome />
       <SideControllList />
     </>
   )

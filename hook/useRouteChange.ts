@@ -1,17 +1,19 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { startLoading } from 'redux/actions/loadingAction'
+import { startPageChanging } from 'redux/actions/pageChangingAction'
+import { RootStateType } from 'redux/reducers/rootReducer'
 
 const useRouteChange = (): void => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const isLoading = useSelector((state: RootStateType) => state.isLoading)
 
   useEffect(() => {
     const handleRouteChangeComplete = () => {
-      if (router.pathname !== '/') {
-        dispatch(startLoading())
+      if (!isLoading) {
+        dispatch(startPageChanging())
       }
     }
 
@@ -20,7 +22,7 @@ const useRouteChange = (): void => {
     return () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete)
     }
-  }, [dispatch, router])
+  }, [dispatch, router, isLoading])
 }
 
 export default useRouteChange

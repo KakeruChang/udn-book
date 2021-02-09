@@ -1,69 +1,108 @@
-import { FC, Fragment, ReactNode } from 'react'
-import Link from 'next/link'
-import Head from 'next/head'
+import { FC, Fragment, ReactNode, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
+import Head from 'next/head'
 import styled from 'styled-components'
 
-import styles from 'styles/Home.module.css'
 import SideControllList from 'components/SideControllList'
+import { startLoading, endLoading } from 'redux/actions/loadingAction'
+import { links } from 'data/index'
+import { RootStateType } from 'redux/reducers/rootReducer'
 
 const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: 'center';
+  position: relative;
 `
 const Title = styled.h1`
   text-align: center;
 `
+const Space = styled.div`
+  height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+`
 
-const links = [
-  { title: 'Overview', link: '/overview' },
-  { title: 'Organization', link: '/organization' },
-  { title: 'Newmedia', link: '/newmedia' },
-  { title: 'Reporter', link: '/reporter' },
-  { title: 'Vision', link: '/vision' }
-]
+const BottomLine = styled.div`
+  width: 100%;
+  height: 1px;
+`
 
 interface PageContentProps {
   title: string
-  rootUrl: string
   children?: ReactNode
 }
 
 const PageContent: FC<PageContentProps> = ({
   title,
-  rootUrl,
   children
 }: PageContentProps) => {
+  const [trigger, setTrigger] = useState(false)
+  const bottomRef = useRef(null)
   const router = useRouter()
+  const dispatch = useDispatch()
+  const isLoading = useSelector((state: RootStateType) => state.isLoading)
 
-  const linkController = (e) => {
-    e.preventDefault()
-    router.push(
-      links[Math.floor(Math.random() * Math.floor(5))].link,
-      undefined,
-      { shallow: true }
-    )
-  }
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0
+    }
+    const callback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setTrigger(true)
+        }
+      })
+    }
+
+    const observer = new IntersectionObserver(callback, options)
+    observer.observe(bottomRef.current)
+
+    if (isLoading) {
+      dispatch(endLoading())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (trigger) {
+      for (let i = 0; i < links.length; i += 1) {
+        if (router.pathname === links[i].link) {
+          const nextPageIndex = i + 1
+          if (nextPageIndex < links.length) {
+            dispatch(startLoading())
+            router.push(links[nextPageIndex].link)
+          }
+        }
+      }
+    }
+  }, [dispatch, router, trigger])
 
   return (
     <Fragment key={title}>
       <Head>
         <title>{title}</title>
       </Head>
-      <Title>{title}</Title>
+
       <Wrapper>
-        <Link href={`${rootUrl}/0`}>
-          <a href={`${rootUrl}/0`} className={styles.card}>
-            <h3>see content &rarr;</h3>
-          </a>
-        </Link>
+        <Space id='list-part1'>
+          <Title>{title}</Title>
+        </Space>
+        <Space id='list-part2' />
+        {/* <Space id='#list-part1'>
+          <Title>{title}</Title>
+        </Space>
+        <Space id='#list-part2'>
+          <BottomLine ref={bottomRef} />
+        </Space> */}
         {children}
         <SideControllList />
+        <BottomLine ref={bottomRef} />
       </Wrapper>
     </Fragment>
   )
 }
+
 PageContent.defaultProps = {
   children: null
 }

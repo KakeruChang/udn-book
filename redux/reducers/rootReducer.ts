@@ -2,14 +2,14 @@ import { HYDRATE } from 'next-redux-wrapper'
 import { combineReducers, Action } from 'redux'
 
 import loadingReducer from './loadingReducer'
-import textReducer from './textReducer'
+import pageChangingReducer from './pageChangingReducer'
 import languageReducer from './languageReducer'
 import languageDataReducer from './languageDataReducer'
 import { LanguageDataContent } from '../actions/languageDataAction'
 
 export interface RootStateType {
   isLoading: boolean
-  textSize: string
+  isPageChanging: boolean
   language: string
   data: LanguageDataContent
 }
@@ -31,8 +31,8 @@ const rootReducer = (
   }
 
   return combineReducers({
-    textSize: textReducer,
     isLoading: loadingReducer,
+    isPageChanging: pageChangingReducer,
     language: languageReducer,
     data: languageDataReducer
   })(state, action)

@@ -15,21 +15,21 @@ const Wrapper = styled.div`
   left: 0;
   z-index: 10;
 `
-const FadeAnimation = (index) => keyframes`
-  0% { width: 0; }
-  ${20 + (index * 20) / 3}% { width: 100%; }
-  ${80 - (index * 20) / 3}% { width: 100% }
-  100% { width: 0; }
+const FadeAnimation = (index, count) => keyframes`
+  ${0 + index * (100 / (2 * count))}% { transform: translateX(100%) }
+  ${50 + index * (100 / (2 * count))}% { transform: translateX(-100%) }
+  100% { transform: translateX(-100%)}
 `
 
 const FadeIn = styled.div`
   background-color: black;
-  height: 25vh;
+  height: ${(props) => `${100 / props.count}vh`};
   animation-duration: ${(props) => `${props.seconds}s`};
-  animation-name: ${(props) => FadeAnimation(props.timeIndex)};
-  width: 0;
+  animation-name: ${(props) => FadeAnimation(props.timeIndex, props.count)};
+  width: 100vw;
+  transform: translateX(100%);
   position: absolute;
-  top: ${(props) => `${props.timeIndex * 25}vh`};
+  top: ${(props) => `${props.timeIndex * (100 / props.count)}vh`};
 `
 
 const Loading: FC = () => {
@@ -46,8 +46,8 @@ const Loading: FC = () => {
 
       setTimeout(() => {
         if (router.asPath.indexOf('#') === -1) {
-          window.scrollTo(0, 0)
-          console.log('loading:window.scrollTo(0, 0)')
+          console.log('isloading: window.scrollTo({ top: 0 })')
+          window.scrollTo({ top: 0 })
         }
       }, (animationSeconds * 1000) / 2)
 
@@ -62,11 +62,12 @@ const Loading: FC = () => {
   }, [isLoading])
 
   const FadeInList = () => {
-    const number = 4
+    const count = 20
     const list = []
-    for (let i = 0; i < number; i += 1) {
+    for (let i = 0; i < count; i += 1) {
       list.push(
         <FadeIn
+          count={count}
           timeIndex={i}
           isLoading={isLoading}
           seconds={animationSeconds}

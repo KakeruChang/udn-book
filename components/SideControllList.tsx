@@ -1,13 +1,12 @@
 import { FC } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import { RootStateType } from 'redux/reducers/rootReducer'
+import { links } from 'data/index'
 
 const Wrapper = styled.div`
-  height: 100vh;
+  height: 50vh;
   width: 100px;
   position: fixed;
   top: 100px;
@@ -17,72 +16,41 @@ const Wrapper = styled.div`
 `
 const MainLink = styled.a`
   font-weight: bolder;
-  font-size: ${(props) => {
-    if (props.textSize === 'L') {
-      return '40px'
-    }
-    if (props.textSize === 'M') {
-      return '30px'
-    }
-    return '20px'
-  }};
+  font-size: 30px;
 `
 const SubLink = styled.a`
-  font-size: ${(props) => {
-    if (props.textSize === 'L') {
-      return '24px'
-    }
-    if (props.textSize === 'M') {
-      return '18px'
-    }
-    return '12px'
-  }};
+  font-size: 18px;
 `
-const links = [
-  { title: 'Overview', link: '/overview' },
-  { title: 'Organization', link: '/organization' },
-  { title: 'Newmedia', link: '/newmedia' },
-  { title: 'Reporter', link: '/reporter' },
-  { title: 'Vision', link: '/vision' }
-]
 
 const SideControllList: FC = () => {
-  const textSize = useSelector((state: RootStateType) => state.textSize)
   const router = useRouter()
 
   const anchorList = []
 
-  const checkLink = (index) => {
+  const checkLink = (index, e) => {
+    e.preventDefault()
     router.push(links[index].link, undefined, { shallow: true })
   }
 
   for (let i = 0; i < links.length; i += 1) {
-    const subLink1 = `${links[i].link}/0`
-    const subLink2 = `${links[i].link}/0#list-0-part2`
+    const subLink1 = `${links[i].link}#list-part1`
+    const subLink2 = `${links[i].link}#list-part2`
 
     anchorList.push(
       <Link href={links[i].link} key={`main-${i}`}>
-        <MainLink
-          href={links[i].link}
-          textSize={textSize}
-          onClick={() => checkLink(i)}
-        >
+        <MainLink href={links[i].link} onClick={(e) => checkLink(i, e)}>
           {links[i].title}
         </MainLink>
       </Link>
     )
     anchorList.push(
       <Link href={subLink1} key={`sub-${i}-1`}>
-        <SubLink href={subLink1} textSize={textSize}>
-          列表0
-        </SubLink>
+        <SubLink href={subLink1}>上錨點</SubLink>
       </Link>
     )
     anchorList.push(
       <Link href={subLink2} key={`sub-${i}-2`}>
-        <SubLink href={subLink2} textSize={textSize}>
-          列表0-2
-        </SubLink>
+        <SubLink href={subLink2}>下錨點</SubLink>
       </Link>
     )
   }
