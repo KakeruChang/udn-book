@@ -11,7 +11,8 @@ const Wrapper = styled.div`
   width: 100vw;
   max-width: 100%;
   position: fixed;
-  top: 0;
+  top: ${(props) => (props.fadeOutTrigger ? '100vh' : 0)};
+  transition: all 1s;
   left: 0;
   z-index: 10;
   background-color: #000;
@@ -49,6 +50,7 @@ const Loading: FC = () => {
   const dispatch = useDispatch()
   const isLoading = useSelector((state: RootStateType) => state.isLoading)
   const [isExist, setIsExist] = useState(false)
+  const [fadeOutTrigger, setFadeOutTrigger] = useState(false)
   const animationSeconds = 2.5
 
   useEffect(() => {
@@ -63,10 +65,16 @@ const Loading: FC = () => {
       }, (animationSeconds * 1000) / 2)
 
       setTimeout(() => {
+        setFadeOutTrigger(true)
+      }, animationSeconds * 1000)
+
+      setTimeout(() => {
         document.body.setAttribute('style', 'overflow: visible;')
         setIsExist(false)
         dispatch(endLoading())
-      }, animationSeconds * 1000)
+
+        setFadeOutTrigger(false)
+      }, (animationSeconds + 1) * 1000)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,7 +82,7 @@ const Loading: FC = () => {
 
   if (isExist) {
     return (
-      <Wrapper>
+      <Wrapper fadeOutTrigger={fadeOutTrigger}>
         <h1>{isLoading.title}</h1>
         <LoadingText>Loading...</LoadingText>
         <LoadingWrapper>
