@@ -5,7 +5,8 @@ import Head from 'next/head'
 import styled from 'styled-components'
 
 import SideControllList from 'components/SideControllList'
-import { startLoading } from 'redux/actions/loadingAction'
+import ProgressToNextPage from 'components/ProgressToNextPage'
+import { startLoading, endLoading } from 'redux/actions/loadingAction'
 import { links } from 'data/index'
 import { RootStateType } from 'redux/reducers/rootReducer'
 
@@ -67,6 +68,10 @@ const PageContent: FC<PageContentProps> = ({
     const observer = new IntersectionObserver(callback, options)
     observer.observe(bottomRef.current)
 
+    if (isLoading.status) {
+      dispatch(endLoading())
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -96,6 +101,7 @@ const PageContent: FC<PageContentProps> = ({
         <Space id='list-part2' />
         {children}
         <SideControllList />
+        <ProgressToNextPage />
         <BottomLine ref={bottomRef} />
       </Wrapper>
     </Fragment>

@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react'
 // import store from '../redux/store'
 import { wrapper } from 'redux/store'
 import PageChanging from 'components/PageChanging'
-import Loading from 'components/Loading'
+// import Loading from 'components/Loading'
 import BackToHome from 'components/BackToHome'
 import useRouteChange from 'hook/useRouteChange'
 import '../styles/globals.css'
@@ -21,7 +21,7 @@ const MyApp = ({ Component, pageProps }: MyAppProps) => {
     <>
       <Component {...pageProps} />
       <PageChanging />
-      <Loading />
+      {/* <Loading /> */}
       <BackToHome />
     </>
   )

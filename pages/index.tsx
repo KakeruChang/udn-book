@@ -12,6 +12,7 @@ import { RootStateType } from 'redux/reducers/rootReducer'
 // import { wrapper } from 'redux/store'
 import { links } from 'data/index'
 import { startLoading } from 'redux/actions/loadingAction'
+// import LiuBtnGroup from 'components/LiuBtnGroup'
 
 // export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
 //   async ({ store }) => {
@@ -38,21 +39,21 @@ const Home: NextPage = () => {
 
   const clickHandler = (e, link, title) => {
     e.preventDefault()
-    dispatch(startLoading(title))
+    // dispatch(startLoading(title))
     router.push(link, undefined, { shallow: true })
   }
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Welcome to UDN</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href='https://nextjs.org'>UDN</a>
         </h1>
-
+        {/* <LiuBtnGroup /> */}
         <div className={styles.grid}>
           {links.map((item) => (
             <Link href={item.link} key={item.link}>
